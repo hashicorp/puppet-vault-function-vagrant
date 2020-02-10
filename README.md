@@ -81,11 +81,12 @@ $ vault write auth/cert/certs/puppetserver \
     certificate=@/etc/vault/keys/ca_cert.pem \
     ttl=3600
 $ vault policy write all_secrets - <<EOF
-path "secret/*" {
+path "kv/*" {
     capabilities = ["read"]
 }
 EOF
-$ vault write secret/test foo=bar
+$ vault secrets enable kv
+$ vault kv put kv/test foo=bar
 ```
 
 Now, create the `node1` instance,

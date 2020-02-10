@@ -2,10 +2,14 @@
 
 class profile::vault_message {
 
-  $d = Deferred('vault_lookup::lookup', ["secret/test", 'https://vault.vm:8200'])
+  $vault_lookup = {
+    'vault' => Deferred('vault_lookup::lookup',
+                    ["kv/data/test", 'https://vault.vm:8200']),
+  }
 
-  notify { "Example":
-    message => $d
+  notify { 'Secret from Vault':
+    message => Deferred('inline_epp',
+               ['<%= $vault.unwrap %>', $vault_lookup]),
   }
 
 }
